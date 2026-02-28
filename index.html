@@ -1,44 +1,356 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Abhijit Das | Energy Systems Leader</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Abhijit Das — Energy systems leader focused on electrification and grid strategy. Publications, writing, and contact." />
+
   <style>
-    body {
+    :root{
+      --bg1:#0b1220;
+      --bg2:#0f1a33;
+      --text:#eaf0ff;
+      --muted:rgba(234,240,255,.72);
+      --muted2:rgba(234,240,255,.55);
+      --card:rgba(255,255,255,.06);
+      --card2:rgba(255,255,255,.08);
+      --line:rgba(255,255,255,.12);
+      --accent:#38bdf8;
+      --shadow: 0 20px 70px rgba(0,0,0,.35);
+      --radius: 18px;
+      --max: 980px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 20% 10%, rgba(56,189,248,.18), transparent 60%),
+        radial-gradient(700px 400px at 80% 30%, rgba(99,102,241,.14), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      letter-spacing: 0.2px;
+    }
+
+    a{ color:var(--accent); text-decoration:none; }
+    a:hover{ text-decoration:underline; }
+
+    .wrap{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 42px 22px 70px;
+    }
+
+    .top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      padding: 8px 0 22px;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      line-height:1.1;
+    }
+    .brand .name{
+      font-size: 28px;
+      font-weight: 760;
+      letter-spacing: .3px;
+    }
+    .brand .tag{
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:flex-end;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      font-size: 13px;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    .pill:hover{
+      background: rgba(255,255,255,.06);
+      text-decoration:none;
+    }
+
+    .hero{
+      margin-top: 10px;
+      padding: 34px 26px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, var(--card), rgba(255,255,255,.03));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1{
+      margin: 0 0 10px;
+      font-size: 46px;
+      letter-spacing: .2px;
+      line-height: 1.05;
+    }
+    .hero p{
+      margin: 0 0 18px;
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 760px;
+      line-height: 1.5;
+    }
+
+    .ctaRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top: 18px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      text-decoration:none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .btn:hover{ background: rgba(255,255,255,.07); text-decoration:none; }
+    .btnPrimary{
+      background: rgba(56,189,248,.14);
+      border-color: rgba(56,189,248,.35);
+    }
+    .btnPrimary:hover{ background: rgba(56,189,248,.20); }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .card{
+      padding: 18px 18px 16px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, var(--card2), rgba(255,255,255,.03));
+      border: 1px solid var(--line);
+    }
+    .card h2{
+      margin: 0 0 10px;
+      font-size: 15px;
+      letter-spacing:.2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .card .big{
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #0f172a;
-      color: #f1f5f9;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--text);
     }
-    h1 {
-      font-size: 48px;
-      margin-bottom: 10px;
+
+    .list{
+      margin: 10px 0 0;
+      padding: 0;
+      list-style: none;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
     }
-    p {
-      font-size: 20px;
-      opacity: 0.8;
+
+    .item{
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      display:flex;
+      flex-direction:column;
+      gap:6px;
     }
-    a {
-      color: #38bdf8;
-      text-decoration: none;
-      margin: 0 15px;
-      font-weight: 500;
+    .itemTitle{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:baseline;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .itemMeta{
+      font-size: 13px;
+      color: var(--muted2);
+      line-height: 1.4;
+    }
+
+    .footer{
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,.10);
+      color: var(--muted2);
+      font-size: 13px;
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .kicker{
+      font-size: 13px;
+      color: var(--muted2);
+      margin-top: 10px;
+    }
+
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; }
+      .hero h1{ font-size: 38px; }
+      .top{ flex-direction:column; align-items:flex-start; }
+      .nav{ justify-content:flex-start; }
     }
   </style>
 </head>
+
 <body>
-  <div>
-    <h1>Abhijit Das</h1>
-    <p>Energy Systems Leader | Electrification | Grid Strategy</p>
-    <p>
-      <a href="https://www.linkedin.com">LinkedIn</a>
-    </p>
+  <div class="wrap">
+
+    <!-- Top bar -->
+    <div class="top">
+      <div class="brand">
+        <div class="name">Abhijit Das</div>
+        <div class="tag">Energy Systems Leader · Electrification · Grid Strategy</div>
+      </div>
+
+      <div class="nav">
+        <!-- Replace these links -->
+        <a class="pill" href="https://www.linkedin.com/in/YOUR-LINKEDIN" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="pill" href="https://YOUR-SUBSTACK.substack.com" target="_blank" rel="noopener">Substack</a>
+        <a class="pill" href="/publications.html">Publications</a>
+        <a class="pill" href="/resume.html">Resume</a>
+        <a class="pill" href="mailto:YOUR.EMAIL@gmail.com">Email</a>
+      </div>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero">
+      <h1>Energy Systems Leader</h1>
+      <p>
+        System architect and strategist focused on electrification programs and grid-aware deployment.
+        Interested in roles spanning engineering leadership, program leadership, and energy transition strategy.
+      </p>
+
+      <div class="ctaRow">
+        <!-- Replace these links -->
+        <a class="btn btnPrimary" href="https://www.linkedin.com/in/YOUR-LINKEDIN" target="_blank" rel="noopener">Connect on LinkedIn</a>
+        <a class="btn" href="https://YOUR-SUBSTACK.substack.com" target="_blank" rel="noopener">Read on Substack</a>
+        <a class="btn" href="/publications.html">View Publications</a>
+        <a class="btn" href="/resume.html">Download Resume</a>
+      </div>
+
+      <div class="kicker">
+        Based in the U.S. · Open to senior engineering/program/product leadership roles in energy and electrification.
+      </div>
+    </div>
+
+    <!-- Content grid -->
+    <div class="grid">
+
+      <!-- About -->
+      <div class="card">
+        <h2>About</h2>
+        <p class="big">
+          Abhijit leads cross-functional work at the intersection of vehicle electrification and energy infrastructure.
+          His focus is building practical systems that scale—process, architecture, and delivery—while keeping an
+          executive view of risk, cost, and timelines.
+        </p>
+
+        <ul class="list" style="margin-top:14px;">
+          <li class="item">
+            <div class="itemTitle">
+              <span>Core themes</span><span style="color:var(--muted2);font-weight:600;">2026</span>
+            </div>
+            <div class="itemMeta">
+              Electrification programs · Grid integration · Systems architecture · Technical + business leadership
+            </div>
+          </li>
+          <li class="item">
+            <div class="itemTitle">
+              <span>Strength</span><span style="color:var(--muted2);font-weight:600;">Style</span>
+            </div>
+            <div class="itemMeta">
+              Simplifying complex problems into concrete plans, crisp interfaces, and clear execution paths.
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Featured -->
+      <div class="card">
+        <h2>Featured</h2>
+        <ul class="list">
+          <!-- Replace these with your real items -->
+          <li class="item">
+            <div class="itemTitle">
+              <span>Selected writing</span>
+              <a href="https://YOUR-SUBSTACK.substack.com" target="_blank" rel="noopener">Open →</a>
+            </div>
+            <div class="itemMeta">Energy markets, grid constraints, and electrification strategy.</div>
+          </li>
+
+          <li class="item">
+            <div class="itemTitle">
+              <span>Publications</span>
+              <a href="/publications.html">View →</a>
+            </div>
+            <div class="itemMeta">Short list of published / presented work and key artifacts.</div>
+          </li>
+
+          <li class="item">
+            <div class="itemTitle">
+              <span>Resume</span>
+              <a href="/resume.html">Open →</a>
+            </div>
+            <div class="itemMeta">Executive summary and experience highlights.</div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div>© <span id="year"></span> Abhijit Das</div>
+      <div>
+        <a href="mailto:YOUR.EMAIL@gmail.com">YOUR.EMAIL@gmail.com</a>
+        <span style="opacity:.6;"> · </span>
+        <a href="https://www.linkedin.com/in/YOUR-LINKEDIN" target="_blank" rel="noopener">LinkedIn</a>
+        <span style="opacity:.6;"> · </span>
+        <a href="https://YOUR-SUBSTACK.substack.com" target="_blank" rel="noopener">Substack</a>
+      </div>
+    </div>
+
   </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
