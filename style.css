@@ -62,3 +62,22 @@ hr {
   opacity: 0.2;
   margin: 24px 0;
 }
+h2 {
+  font-weight: 600;
+  margin-top: 50px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 6px;
+}
+
+h3 {
+  margin-top: 25px;
+  font-weight: 600;
+}
+
+.pub-list {
+  padding-left: 22px;
+}
+
+.pub-list li {
+  margin: 12px 0;
+}
