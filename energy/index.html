@@ -1,165 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Energy Research — Abhijit Das</title>
-  <link rel="icon" href="../favicon.png?v=2">
-  <meta name="description" content="Energy research at the intersection of transportation electrification, grid infrastructure, and energy markets.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #f9f9f7;
-      --text-primary: #0d0d0c;
-      --text-secondary: #3a3a37;
-      --text-muted: #666661;
-      --border: rgba(13,13,12,0.15);
-    }
-    body { background: var(--bg); color: var(--text-primary); font-family: 'DM Sans', system-ui, sans-serif; font-size: 20px; min-height: 100vh; }
-    .topnav { padding: 1.5rem 4rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
-    .topnav-back { font-size: 14px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); text-decoration: none; transition: color 0.15s; }
-    .topnav-back:hover { color: var(--text-primary); }
-    .topnav-right { display: flex; gap: 2.5rem; }
-    .topnav-right a { font-size: 14px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); text-decoration: none; transition: color 0.15s; }
-    .topnav-right a:hover { color: var(--text-primary); }
-    .wrap { max-width: 1080px; margin: 0 auto; padding: 6rem 4rem 8rem; }
-    .page-label { font-size: 13px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1rem; }
-    h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(56px, 7vw, 84px); font-weight: 400; letter-spacing: -1px; line-height: 1.05; color: var(--text-primary); margin-bottom: 0.75rem; }
-    .intro { font-size: 20px; font-weight: 400; color: var(--text-secondary); line-height: 1.7; max-width: 800px; margin-bottom: 2rem; }
-    .quick-links { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.75rem; }
-    .quick-link { font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); border: 1px solid rgba(13,13,12,0.22); border-radius: 4px; padding: 8px 18px; text-decoration: none; transition: color 0.15s, border-color 0.15s; }
-    .quick-link:hover { color: var(--text-primary); border-color: rgba(13,13,12,0.4); }
-    .topics { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4rem; }
-    .topic { font-size: 13px; font-weight: 400; color: var(--text-muted); border: 1px solid var(--border); border-radius: 20px; padding: 5px 15px; }
-    hr { border: none; border-top: 1px solid var(--border); margin-bottom: 0; }
-    .thesis { border-left: 2px solid var(--border); padding: 0.25rem 0 0.25rem 2rem; margin: 2.75rem 0 4rem; }
-    .thesis-label { font-size: 13px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1rem; }
-    .thesis-text { font-size: 19px; font-weight: 400; color: var(--text-secondary); line-height: 1.8; max-width: 800px; }
-    .thesis-text strong { font-weight: 500; color: var(--text-primary); }
-    .section-label { font-size: 13px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0; }
-    .work-list { list-style: none; }
-    .work-list li:first-child .work-item { border-top: 1px solid var(--border); }
-    .work-item { display: flex; align-items: flex-start; justify-content: space-between; padding: 1.75rem 0; border-bottom: 1px solid var(--border); text-decoration: none; gap: 1.5rem; transition: opacity 0.15s; }
-    .work-item:hover { opacity: 0.45; }
-    .work-left { display: flex; flex-direction: column; gap: 8px; flex: 1; }
-    .work-title-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .work-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; font-weight: 400; color: var(--text-primary); line-height: 1.2; }
-    .work-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); border: 1px solid var(--border); border-radius: 3px; padding: 3px 10px; }
-    .work-desc { font-size: 17px; font-weight: 400; color: var(--text-muted); line-height: 1.65; max-width: 800px; }
-    .work-meta { font-size: 15px; font-weight: 400; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; padding-top: 5px; }
-    @media (max-width: 768px) {
-      .topnav { padding: 1.1rem 1.5rem; }
-      .wrap { padding: 3.5rem 1.5rem 5rem; }
-      .work-meta { display: none; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Energy Research — Abhijit Das</title>
+<link rel="icon" href="../favicon.png?v=2">
+<meta name="description" content="Energy research at the intersection of transportation electrification, grid infrastructure, and energy markets.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+--bg: #f9f9f7;
+--text-primary: #0d0d0c;
+--text-secondary: #3a3a37;
+--text-muted: #666661;
+--border: rgba(13,13,12,0.15);
+}
+body { background: var(--bg); color: var(--text-primary); font-family: 'DM Sans', system-ui, sans-serif; font-size: 20px; min-height: 100vh; }
+.topnav { padding: 1.5rem 4rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+.topnav-back { font-size: 14px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); text-decoration: none; transition: color 0.15s; }
+.topnav-back:hover { color: var(--text-primary); }
+.topnav-right { display: flex; gap: 2.5rem; }
+.topnav-right a { font-size: 14px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); text-decoration: none; transition: color 0.15s; }
+.topnav-right a:hover { color: var(--text-primary); }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 6rem 4rem 8rem; }
+.page-label { font-size: 13px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1rem; }
+h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(56px, 7vw, 84px); font-weight: 400; letter-spacing: -1px; line-height: 1.05; color: var(--text-primary); margin-bottom: 0.75rem; }
+.intro { font-size: 20px; font-weight: 400; color: var(--text-secondary); line-height: 1.7; max-width: 800px; margin-bottom: 2rem; }
+.quick-links { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.75rem; }
+.quick-link { font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); border: 1px solid rgba(13,13,12,0.22); border-radius: 4px; padding: 8px 18px; text-decoration: none; transition: color 0.15s, border-color 0.15s; }
+.quick-link:hover { color: var(--text-primary); border-color: rgba(13,13,12,0.4); }
+.topics { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4rem; }
+.topic { font-size: 13px; font-weight: 400; color: var(--text-muted); border: 1px solid var(--border); border-radius: 20px; padding: 5px 15px; }
+hr { border: none; border-top: 1px solid var(--border); margin-bottom: 0; }
+.thesis { border-left: 2px solid var(--border); padding: 0.25rem 0 0.25rem 2rem; margin: 2.75rem 0 4rem; }
+.thesis-label { font-size: 13px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1rem; }
+.thesis-text { font-size: 19px; font-weight: 400; color: var(--text-secondary); line-height: 1.8; max-width: 800px; }
+.thesis-text strong { font-weight: 500; color: var(--text-primary); }
+.section-label { font-size: 13px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0; }
+.work-list { list-style: none; }
+.work-list li:first-child .work-item { border-top: 1px solid var(--border); }
+.work-item { display: flex; align-items: flex-start; justify-content: space-between; padding: 1.75rem 0; border-bottom: 1px solid var(--border); text-decoration: none; gap: 1.5rem; transition: opacity 0.15s; }
+.work-item:hover { opacity: 0.45; }
+.work-left { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.work-title-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.work-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; font-weight: 400; color: var(--text-primary); line-height: 1.2; }
+.work-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); border: 1px solid var(--border); border-radius: 3px; padding: 3px 10px; }
+.work-desc { font-size: 17px; font-weight: 400; color: var(--text-muted); line-height: 1.65; max-width: 800px; }
+.work-meta { font-size: 15px; font-weight: 400; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; padding-top: 5px; }
+@media (max-width: 768px) {
+.topnav { padding: 1.1rem 1.5rem; }
+.wrap { padding: 3.5rem 1.5rem 5rem; }
+.work-meta { display: none; }
+}
+</style>
 </head>
 <body>
-  <nav class="topnav">
-    <a class="topnav-back" href="/">← Abhijit Das</a>
-    <div class="topnav-right">
-      <a href="https://soundsofmind.substack.com/?no_cover=true" target="_blank" rel="noopener">Writing</a>
-      <a href="/publications.html">Publications</a>
-      <a href="mailto:abhijit.d80@gmail.com">Contact</a>
-    </div>
-  </nav>
+<nav class="topnav">
+<a class="topnav-back" href="/">← Abhijit Das</a>
+<div class="topnav-right">
+<a href="https://soundsofmind.substack.com/?no_cover=true" target="_blank" rel="noopener">Writing</a>
+<a href="/publications.html">Publications</a>
+<a href="mailto:abhijit.d80@gmail.com">Contact</a>
+</div>
+</nav>
 
-  <div class="wrap">
-    <p class="page-label">Energy Research</p>
-    <h1>Energy Research &amp; Grid Strategy</h1>
-    <p class="intro">Work at the intersection of transportation electrification, grid infrastructure, and energy markets. Five years managing battery electric vehicle programs at Volvo Trucks has made grid coordination a daily operational reality — not an abstraction.</p>
+<div class="wrap">
+<p class="page-label">Energy Research</p>
+<h1>Energy Research &amp; Grid Strategy</h1>
+<p class="intro">Work at the intersection of transportation electrification, grid infrastructure, and energy markets. Five years managing battery electric vehicle programs at Volvo Trucks has made grid coordination a daily operational reality — not an abstraction.</p>
 
-    <div class="quick-links">
-      <a class="quick-link" href="/energy/energy-map.html">Energy Ecosystem Map</a>
-      <a class="quick-link" href="/energy/virtual-compute-demo.html">Virtual Compute Demo</a>
-      <a class="quick-link" href="https://soundsofmind.substack.com/?no_cover=true" target="_blank" rel="noopener">Substack ↗</a>
-      <a class="quick-link" href="/publications.html">Publications</a>
-    </div>
+<div class="quick-links">
+<a class="quick-link" href="/energy/energy-map.html">Energy Ecosystem Map</a>
+<a class="quick-link" href="/energy/virtual-compute-demo.html">Virtual Compute Demo</a>
+<a class="quick-link" href="/energy/dc-location-explorer.html">DC Location Explorer</a>
+<a class="quick-link" href="https://soundsofmind.substack.com/?no_cover=true" target="_blank" rel="noopener">Substack ↗</a>
+<a class="quick-link" href="/publications.html">Publications</a>
+</div>
 
-    <div class="topics">
-      <span class="topic">Grid Enhancing Technologies</span>
-      <span class="topic">Virtual Transmission</span>
-      <span class="topic">Transportation electrification</span>
-      <span class="topic">Renewable curtailment</span>
-      <span class="topic">ISO / RTO markets</span>
-      <span class="topic">AI &amp; data center load</span>
-      <span class="topic">Demand coordination</span>
-      <span class="topic">CERAWeek 2026 NextGen</span>
-    </div>
+<div class="topics">
+<span class="topic">Grid Enhancing Technologies</span>
+<span class="topic">Virtual Transmission</span>
+<span class="topic">Transportation electrification</span>
+<span class="topic">Renewable curtailment</span>
+<span class="topic">ISO / RTO markets</span>
+<span class="topic">AI &amp; data center load</span>
+<span class="topic">Demand coordination</span>
+<span class="topic">CERAWeek 2026 NextGen</span>
+</div>
 
-    <hr>
+<hr>
 
-    <div class="thesis">
-      <p class="thesis-label">Core Research Thesis</p>
-      <p class="thesis-text">The U.S. curtails over <strong>20 million MWh of renewable energy annually</strong> — not because the energy doesn't exist, but because no one coordinates who uses it, when. A two-layer framework combining <strong>Grid Enhancing Technologies (GET)</strong> with <strong>renewable-aware digital demand coordination</strong> (AI training workloads + EV and truck charging flexibility) can reduce transmission congestion and curtailment without waiting for new infrastructure. New transmission takes 10–20 years. The demand is arriving now.</p>
-    </div>
+<div class="thesis">
+<p class="thesis-label">Core Research Thesis</p>
+<p class="thesis-text">The U.S. curtails over <strong>20 million MWh of renewable energy annually</strong> — not because the energy doesn't exist, but because no one coordinates who uses it, when. A two-layer framework combining <strong>Grid Enhancing Technologies (GET)</strong> with <strong>renewable-aware digital demand coordination</strong> (AI training workloads + EV and truck charging flexibility) can reduce transmission congestion and curtailment without waiting for new infrastructure. New transmission takes 10–20 years. The demand is arriving now.</p>
+</div>
 
-    <p class="section-label">Work</p>
-    <ul class="work-list">
-      <li>
-        <a class="work-item" href="/energy/energy-map.html">
-          <span class="work-left">
-            <span class="work-title-row">
-              <span class="work-title">U.S. Energy Ecosystem — Value Chain Map</span>
-              <span class="work-tag">Interactive</span>
-            </span>
-            <span class="work-desc">Every player in the U.S. electricity system from generation to the end customer. Color-coded by ownership type. Toggle highlights to see where Grid Enhancing Technologies and Virtual Transmission create value.</span>
-          </span>
-          <span class="work-meta">View →</span>
-        </a>
-      </li>
-      <li>
-        <a class="work-item" href="/energy/virtual-compute-demo.html">
-          <span class="work-left">
-            <span class="work-title-row">
-              <span class="work-title">GET + Virtual Compute — Interactive Demo</span>
-              <span class="work-tag">Interactive</span>
-            </span>
-            <span class="work-desc">Visual demo of how a congested transmission corridor can first be relieved using Grid Enhancing Technologies, and then used to admit renewable-aware flexible compute without recreating congestion. Built as a simple browser-based explanation of the optimization logic behind “compute as virtual transmission.”</span>
-          </span>
-          <span class="work-meta">View →</span>
-        </a>
-      </li>
-      <li>
-        <a class="work-item" href="/energy/ceraweek-2026.html">
-          <span class="work-left">
-            <span class="work-title-row">
-              <span class="work-title">Compute as Virtual Transmission — CERAWeek 2026</span>
-              <span class="work-tag">Talk / Poster</span>
-            </span>
-            <span class="work-desc">NextGen Cohort poster presentation at Innovators Row, CERAWeek 2026, Houston. Accelerating renewable integration through Grid Enhancing Technologies and flexible digital demand coordination. Illustrative scenario: 20% data center flexibility + GET could absorb ~44% of CAISO's 2024 curtailment.</span>
-          </span>
-          <span class="work-meta">March 2026</span>
-        </a>
-      </li>
-      <li>
-        <a class="work-item" href="/publications.html">
-          <span class="work-left">
-            <span class="work-title-row">
-              <span class="work-title">Accelerating Renewable Integration Through GET and Renewable-Aware Load Migration</span>
-              <span class="work-tag">Paper</span>
-            </span>
-            <span class="work-desc">Full research paper. Duke Fuqua School of Business — Energy Markets and Innovation. Dual-innovation framework: deploying GET to unlock physical transmission capacity, and using flexible digital demand as virtual transmission to reduce congestion without new infrastructure.</span>
-          </span>
-          <span class="work-meta">2025</span>
-        </a>
-      </li>
-      <li>
-        <a class="work-item" href="#">
-          <span class="work-left">
-            <span class="work-title-row">
-              <span class="work-title">Distributed Marketplace for Grid Coordination</span>
-              <span class="work-tag">Coming</span>
-            </span>
-            <span class="work-desc">Exploring blockchain and distributed ledger mechanisms for transparent, automated settlement between demand response aggregators, ISO operators, and flexible load providers.</span>
-          </span>
-          <span class="work-meta">In progress</span>
-        </a>
-      </li>
-    </ul>
-  </div>
+<p class="section-label">Work</p>
+<ul class="work-list">
+<li>
+<a class="work-item" href="/energy/energy-map.html">
+<span class="work-left">
+<span class="work-title-row">
+<span class="work-title">U.S. Energy Ecosystem — Value Chain Map</span>
+<span class="work-tag">Interactive</span>
+</span>
+<span class="work-desc">Every player in the U.S. electricity system from generation to the end customer. Color-coded by ownership type. Toggle highlights to see where Grid Enhancing Technologies and Virtual Transmission create value.</span>
+</span>
+<span class="work-meta">View →</span>
+</a>
+</li>
+<li>
+<a class="work-item" href="/energy/virtual-compute-demo.html">
+<span class="work-left">
+<span class="work-title-row">
+<span class="work-title">GET + Virtual Compute — Interactive Demo</span>
+<span class="work-tag">Interactive</span>
+</span>
+<span class="work-desc">Visual demo of how a congested transmission corridor can first be relieved using Grid Enhancing Technologies, and then used to admit renewable-aware flexible compute without recreating congestion. Built as a simple browser-based explanation of the optimization logic behind "compute as virtual transmission."</span>
+</span>
+<span class="work-meta">View →</span>
+</a>
+</li>
+<li>
+<a class="work-item" href="/energy/dc-location-explorer.html">
+<span class="work-left">
+<span class="work-title-row">
+<span class="work-title">Data Center Location — 7-Factor Weight Explorer</span>
+<span class="work-tag">Interactive</span>
+</span>
+<span class="work-desc">Why do data centers go where they go? Rank all 50 US states + DC across seven factors — tax incentives, water availability, fiber connectivity, disaster risk, renewable curtailment, energy cost, and Fortune 500 demand density. Adjust the weights live and watch the rankings shift. The gap between equal-weight and green-weighted rankings is the renewable energy opportunity that most operators ignore.</span>
+</span>
+<span class="work-meta">2026</span>
+</a>
+</li>
+<li>
+<a class="work-item" href="/energy/ceraweek-2026.html">
+<span class="work-left">
+<span class="work-title-row">
+<span class="work-title">Compute as Virtual Transmission — CERAWeek 2026</span>
+<span class="work-tag">Talk / Poster</span>
+</span>
+<span class="work-desc">NextGen Cohort poster presentation at Innovators Row, CERAWeek 2026, Houston. Accelerating renewable integration through Grid Enhancing Technologies and flexible digital demand coordination. Illustrative scenario: 20% data center flexibility + GET could absorb ~44% of CAISO's 2024 curtailment.</span>
+</span>
+<span class="work-meta">March 2026</span>
+</a>
+</li>
+<li>
+<a class="work-item" href="/publications.html">
+<span class="work-left">
+<span class="work-title-row">
+<span class="work-title">Accelerating Renewable Integration Through GET and Renewable-Aware Load Migration</span>
+<span class="work-tag">Paper</span>
+</span>
+<span class="work-desc">Full research paper. Duke Fuqua School of Business — Energy Markets and Innovation. Dual-innovation framework: deploying GET to unlock physical transmission capacity, and using flexible digital demand as virtual transmission to reduce congestion without new infrastructure.</span>
+</span>
+<span class="work-meta">2025</span>
+</a>
+</li>
+<li>
+<a class="work-item" href="#">
+<span class="work-left">
+<span class="work-title-row">
+<span class="work-title">Distributed Marketplace for Grid Coordination</span>
+<span class="work-tag">Coming</span>
+</span>
+<span class="work-desc">Exploring blockchain and distributed ledger mechanisms for transparent, automated settlement between demand response aggregators, ISO operators, and flexible load providers.</span>
+</span>
+<span class="work-meta">In progress</span>
+</a>
+</li>
+</ul>
+</div>
 </body>
 </html>
