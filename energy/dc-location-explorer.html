@@ -1,1 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Center Location — 7-Factor Weight Explorer | Abhijit Das</title>
+<link rel="icon" href="../favicon.png?v=2">
+<meta name="description" content="Interactive explorer: why do data centers go where they go? Adjust weights across 7 factors for all 50 US states + DC.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f9f9f7;
+  --text-primary: #0d0d0c;
+  --text-secondary: #3a3a37;
+  --text-muted: #666661;
+  --border: rgba(13,13,12,0.15);
+  --blue: #1a56a0;
+}
+body { background: var(--bg); color: var(--text-primary); font-family: 'DM Sans', system-ui, sans-serif; font-size: 15px; min-height: 100vh; }
 
+/* ── Site nav ── */
+.topnav { padding: 1.4rem 4rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+.topnav-back { font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); text-decoration: none; }
+.topnav-back:hover { color: var(--text-primary); }
+.topnav-right { display: flex; gap: 2.5rem; }
+.topnav-right a { font-size: 13px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); text-decoration: none; }
+.topnav-right a:hover { color: var(--text-primary); }
+
+/* ── Page wrap ── */
+.wrap { max-width: 1200px; margin: 0 auto; padding: 4rem 4rem 8rem; }
+.page-label { font-size: 12px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem; }
+h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(36px, 5vw, 56px); font-weight: 400; letter-spacing: -0.5px; line-height: 1.1; margin-bottom: 0.75rem; }
+.intro { font-size: 17px; color: var(--text-secondary); line-height: 1.7; max-width: 780px; margin-bottom: 2.5rem; }
+
+/* ── Weight panel ── */
+.panel { background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 2rem; margin-bottom: 2rem; }
+.panel-title { font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.25rem; }
+
+.presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
+.preset-btn { font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-secondary); border: 1px solid rgba(13,13,12,0.22); border-radius: 4px; padding: 7px 16px; background: transparent; cursor: pointer; transition: all 0.15s; }
+.preset-btn:hover { border-color: rgba(13,13,12,0.5); color: var(--text-primary); }
+.preset-btn.active { background: var(--text-primary); color: #fff; border-color: var(--text-primary); }
+
+.sliders-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+@media(max-width: 900px) { .sliders-grid { grid-template-columns: repeat(2, 1fr); } }
+@media(max-width: 500px) { .sliders-grid { grid-template-columns: 1fr; } }
+
+.slider-row { display: flex; flex-direction: column; gap: 5px; }
+.slider-label { display: flex; justify-content: space-between; align-items: baseline; }
+.slider-name { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+.slider-pct { font-size: 16px; font-weight: 500; }
+.slider-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+input[type=range] { width: 100%; height: 4px; cursor: pointer; border-radius: 2px; }
+
+.weight-total { margin-top: 1.25rem; font-size: 13px; color: var(--text-muted); }
+.weight-total.warn { color: #b45309; font-weight: 500; }
+.weight-total.ok { color: #166534; }
+
+.btn-row { margin-top: 1rem; display: flex; gap: 10px; }
+.btn { font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 8px 18px; border-radius: 4px; border: 1px solid rgba(13,13,12,0.22); background: transparent; cursor: pointer; color: var(--text-secondary); transition: all 0.15s; }
+.btn:hover { border-color: rgba(13,13,12,0.5); color: var(--text-primary); }
+.btn-primary { background: var(--text-primary); color: #fff; border-color: var(--text-primary); }
+.btn-primary:hover { opacity: 0.85; color: #fff; }
+
+/* ── Sort controls ── */
+.sort-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 1rem; }
+.sort-bar-label { font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-right: 4px; }
+.sort-btn { font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 20px; border: 1px solid rgba(13,13,12,0.2); background: transparent; cursor: pointer; color: var(--text-secondary); transition: all 0.15s; white-space: nowrap; }
+.sort-btn:hover { border-color: rgba(13,13,12,0.45); color: var(--text-primary); }
+.sort-btn.active { background: var(--text-primary); color: #fff; border-color: var(--text-primary); }
+.sort-dir { font-size: 10px; margin-left: 2px; }
+
+/* ── Table ── */
+.table-section-label { font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0; }
+.table-note { font-size: 13px; color: var(--text-muted); margin-top: 0.4rem; margin-bottom: 1.5rem; }
+
+.table-wrap { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+thead th { background: var(--text-primary); color: #fff; padding: 10px 12px; text-align: center; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+thead th:nth-child(2) { text-align: left; padding-left: 16px; }
+tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(13,13,12,0.03); }
+tbody tr.top3  { background: #fafaf7; }
+tbody tr.top10 { background: #fcfcfb; }
+td { padding: 10px 12px; text-align: center; }
+td:nth-child(2) { text-align: left; padding-left: 16px; }
+
+.rank-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; font-size: 12px; font-weight: 500; }
+.r1 { background: #FFD700; color: #000; }
+.r2 { background: #C0C0C0; color: #000; }
+.r3 { background: #CD7F32; color: #fff; }
+.r-top10 { background: rgba(13,13,12,0.08); color: var(--text-secondary); }
+.r-other { color: var(--text-muted); font-size: 12px; }
+
+.state-name { font-weight: 500; color: var(--text-primary); font-size: 14px; }
+.state-tier  { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+.score-val { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 22px; font-weight: 400; line-height: 1; }
+.score-bar-wrap { width: 60px; height: 3px; background: rgba(13,13,12,0.1); border-radius: 2px; margin: 4px auto 0; }
+.score-bar { height: 3px; border-radius: 2px; background: var(--text-primary); }
+
+.sc { display: inline-block; width: 24px; height: 24px; border-radius: 4px; line-height: 24px; font-size: 13px; font-weight: 500; }
+.sc1 { background: #fee2e2; color: #991b1b; }
+.sc2 { background: #fef3c7; color: #92400e; }
+.sc3 { background: #fefce8; color: #713f12; }
+.sc4 { background: #dcfce7; color: #166534; }
+.sc5 { background: #bbf7d0; color: #14532d; }
+
+.mw-val { font-weight: 500; color: var(--text-primary); }
+.gwh-val { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+/* ── Footer ── */
+.foot { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-muted); line-height: 1.8; }
+.foot a { color: var(--text-secondary); }
+
+@media(max-width: 768px) {
+  .topnav { padding: 1rem 1.5rem; }
+  .wrap { padding: 2.5rem 1.5rem 5rem; }
+  .topnav-right { gap: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="topnav-back" href="/energy/">← Energy Research</a>
+  <div class="topnav-right">
+    <a href="https://soundsofmind.substack.com/?no_cover=true" target="_blank" rel="noopener">Writing</a>
+    <a href="/publications.html">Publications</a>
+    <a href="mailto:abhijit.d80@gmail.com">Contact</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <p class="page-label">Interactive Tool · 2025–2026</p>
+  <h1>Data Center Location<br>Weight Explorer</h1>
+  <p class="intro">Why do data centers go where they go? This tool scores all 50 US states + DC across seven factors and lets you adjust the weight of each one. Change the weights and watch the rankings shift — the gap between the default ranking and the green-weighted one is the renewable energy opportunity most operators ignore.</p>
+
+  <!-- Weight Panel -->
+  <div class="panel">
+    <p class="panel-title">Factor Weights — drag to adjust, must sum to 100%</p>
+
+    <div class="presets" id="presets">
+      <button class="preset-btn active" onclick="applyPreset('equal',this)">Equal weights</button>
+      <button class="preset-btn" onclick="applyPreset('ops',this)">Operations-focused</button>
+      <button class="preset-btn" onclick="applyPreset('green',this)">Green / RE100</button>
+      <button class="preset-btn" onclick="applyPreset('market',this)">Market-driven</button>
+      <button class="preset-btn" onclick="applyPreset('energy',this)">Energy-heavy</button>
+      <button class="preset-btn" onclick="applyPreset('5f',this)">5-factor (no Eng/F500)</button>
+    </div>
+
+    <div class="sliders-grid" id="slidersGrid"></div>
+
+    <div class="weight-total ok" id="wtotal">Total: 100.0% ✓</div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="normalize()">Normalize to 100%</button>
+      <button class="btn" onclick="applyPreset('equal',null)">Reset</button>
+    </div>
+  </div>
+
+  <!-- Sort controls -->
+  <div class="sort-bar">
+    <span class="sort-bar-label">Sort by</span>
+    <button class="sort-btn active" id="sb-score" onclick="sortBy('score',this)">Score <span class="sort-dir" id="sd-score">↓</span></button>
+    <button class="sort-btn" id="sb-name" onclick="sortBy('name',this)">State <span class="sort-dir" id="sd-name"></span></button>
+    <button class="sort-btn" id="sb-curtailment" onclick="sortBy('curtailment',this)">Curtailment <span class="sort-dir" id="sd-curtailment"></span></button>
+    <button class="sort-btn" id="sb-energy" onclick="sortBy('energy',this)">Energy cost <span class="sort-dir" id="sd-energy"></span></button>
+    <button class="sort-btn" id="sb-f500" onclick="sortBy('f500',this)">Fortune 500 <span class="sort-dir" id="sd-f500"></span></button>
+    <button class="sort-btn" id="sb-installed" onclick="sortBy('installed',this)">Installed MW <span class="sort-dir" id="sd-installed"></span></button>
+  </div>
+
+  <p class="table-note" id="tblNote">Showing all 51 states — highest composite score first. Top 10 highlighted.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>State</th>
+          <th>Score</th>
+          <th>Tax</th>
+          <th>Water</th>
+          <th>Fiber</th>
+          <th>Disaster</th>
+          <th>Curtailment</th>
+          <th>Energy Cost</th>
+          <th>Fortune 500</th>
+          <th>Installed MW</th>
+        </tr>
+      </thead>
+      <tbody id="rankBody"></tbody>
+    </table>
+  </div>
+
+  <div class="foot">
+    <p><strong>Sources:</strong> Tax — SDI Alliance / NAIOP / Husch Blackwell 2024 · Water — WRI Aqueduct 4.0 · Fiber — FCC Broadband Data Collection (Jun 2025) · Disaster — FEMA National Risk Index v1.20 (Dec 2025) · Curtailment — EIA / Modo Energy / Amperon 2024 · Energy Cost — EIA industrial rates 2024 · Fortune 500 — Fortune 2024 list</p>
+    <p style="margin-top:0.5rem">Scores 1–5 from the data center operator perspective (5 = most favorable). Composite = weighted average. DC market MW from JLL / Cushman & Wakefield H1 2025.</p>
+    <p style="margin-top:0.5rem"><a href="/energy/">← Back to Energy Research</a> · <a href="https://soundsofmind.substack.com" target="_blank" rel="noopener">Substack ↗</a></p>
+  </div>
+</div>
+
+<script>
+const STATES = [
+  {name:"Alabama",tax:4,water:5,fiber:3,disaster:2,curtailment:2,energy:4,f500:2,installed:5,curt_gwh:100},
+  {name:"Alaska",tax:1,water:5,fiber:1,disaster:5,curtailment:1,energy:1,f500:1,installed:0,curt_gwh:0},
+  {name:"Arizona",tax:4,water:1,fiber:2,disaster:4,curtailment:2,energy:4,f500:3,installed:800,curt_gwh:200},
+  {name:"Arkansas",tax:3,water:5,fiber:4,disaster:2,curtailment:4,energy:5,f500:3,installed:10,curt_gwh:2500},
+  {name:"California",tax:1,water:2,fiber:2,disaster:2,curtailment:4,energy:1,f500:5,installed:3100,curt_gwh:3400},
+  {name:"Colorado",tax:3,water:2,fiber:3,disaster:4,curtailment:4,energy:3,f500:3,installed:200,curt_gwh:2000},
+  {name:"Connecticut",tax:3,water:5,fiber:4,disaster:4,curtailment:2,energy:3,f500:3,installed:20,curt_gwh:100},
+  {name:"Delaware",tax:2,water:5,fiber:3,disaster:4,curtailment:3,energy:4,f500:2,installed:10,curt_gwh:700},
+  {name:"DC",tax:3,water:5,fiber:4,disaster:4,curtailment:3,energy:4,f500:2,installed:500,curt_gwh:700},
+  {name:"Florida",tax:3,water:5,fiber:3,disaster:1,curtailment:2,energy:3,f500:4,installed:900,curt_gwh:100},
+  {name:"Georgia",tax:5,water:5,fiber:4,disaster:3,curtailment:2,energy:4,f500:4,installed:1100,curt_gwh:100},
+  {name:"Hawaii",tax:1,water:5,fiber:4,disaster:5,curtailment:1,energy:1,f500:1,installed:20,curt_gwh:0},
+  {name:"Idaho",tax:2,water:2,fiber:3,disaster:4,curtailment:2,energy:4,f500:1,installed:10,curt_gwh:300},
+  {name:"Illinois",tax:3,water:4,fiber:2,disaster:3,curtailment:3,energy:4,f500:5,installed:600,curt_gwh:700},
+  {name:"Indiana",tax:5,water:4,fiber:4,disaster:3,curtailment:4,energy:3,f500:3,installed:200,curt_gwh:2500},
+  {name:"Iowa",tax:5,water:4,fiber:4,disaster:2,curtailment:4,energy:5,f500:2,installed:650,curt_gwh:2500},
+  {name:"Kansas",tax:3,water:2,fiber:5,disaster:2,curtailment:5,energy:4,f500:2,installed:5,curt_gwh:5500},
+  {name:"Kentucky",tax:4,water:5,fiber:4,disaster:3,curtailment:3,energy:5,f500:2,installed:30,curt_gwh:700},
+  {name:"Louisiana",tax:4,water:5,fiber:3,disaster:1,curtailment:4,energy:5,f500:2,installed:150,curt_gwh:2500},
+  {name:"Maine",tax:2,water:5,fiber:3,disaster:5,curtailment:2,energy:3,f500:1,installed:5,curt_gwh:100},
+  {name:"Maryland",tax:3,water:5,fiber:4,disaster:4,curtailment:3,energy:4,f500:3,installed:200,curt_gwh:700},
+  {name:"Massachusetts",tax:2,water:5,fiber:3,disaster:4,curtailment:2,energy:3,f500:4,installed:250,curt_gwh:100},
+  {name:"Michigan",tax:4,water:4,fiber:2,disaster:3,curtailment:4,energy:3,f500:4,installed:80,curt_gwh:2500},
+  {name:"Minnesota",tax:5,water:4,fiber:3,disaster:3,curtailment:4,energy:3,f500:4,installed:100,curt_gwh:2500},
+  {name:"Mississippi",tax:4,water:5,fiber:4,disaster:1,curtailment:2,energy:5,f500:1,installed:5,curt_gwh:100},
+  {name:"Missouri",tax:4,water:4,fiber:4,disaster:2,curtailment:4,energy:4,f500:3,installed:100,curt_gwh:2500},
+  {name:"Montana",tax:2,water:3,fiber:2,disaster:4,curtailment:4,energy:4,f500:1,installed:5,curt_gwh:2000},
+  {name:"Nebraska",tax:5,water:3,fiber:5,disaster:2,curtailment:5,energy:4,f500:2,installed:10,curt_gwh:5500},
+  {name:"Nevada",tax:5,water:1,fiber:2,disaster:4,curtailment:2,energy:3,f500:2,installed:350,curt_gwh:200},
+  {name:"New Hampshire",tax:2,water:5,fiber:4,disaster:5,curtailment:2,energy:3,f500:1,installed:15,curt_gwh:100},
+  {name:"New Jersey",tax:3,water:5,fiber:4,disaster:4,curtailment:3,energy:4,f500:4,installed:300,curt_gwh:700},
+  {name:"New Mexico",tax:2,water:1,fiber:1,disaster:5,curtailment:2,energy:5,f500:1,installed:30,curt_gwh:200},
+  {name:"New York",tax:3,water:5,fiber:4,disaster:3,curtailment:1,energy:3,f500:5,installed:550,curt_gwh:50},
+  {name:"North Carolina",tax:4,water:5,fiber:3,disaster:3,curtailment:2,energy:4,f500:4,installed:400,curt_gwh:100},
+  {name:"North Dakota",tax:2,water:4,fiber:4,disaster:5,curtailment:5,energy:4,f500:1,installed:2,curt_gwh:5500},
+  {name:"Ohio",tax:4,water:4,fiber:3,disaster:3,curtailment:3,energy:4,f500:4,installed:250,curt_gwh:700},
+  {name:"Oklahoma",tax:3,water:3,fiber:4,disaster:1,curtailment:5,energy:5,f500:2,installed:5,curt_gwh:5500},
+  {name:"Oregon",tax:3,water:3,fiber:3,disaster:4,curtailment:2,energy:3,f500:2,installed:200,curt_gwh:300},
+  {name:"Pennsylvania",tax:2,water:5,fiber:4,disaster:3,curtailment:3,energy:4,f500:4,installed:150,curt_gwh:700},
+  {name:"Rhode Island",tax:2,water:5,fiber:5,disaster:5,curtailment:2,energy:3,f500:2,installed:5,curt_gwh:100},
+  {name:"South Carolina",tax:4,water:5,fiber:3,disaster:3,curtailment:2,energy:5,f500:2,installed:100,curt_gwh:100},
+  {name:"South Dakota",tax:2,water:4,fiber:4,disaster:5,curtailment:5,energy:3,f500:1,installed:5,curt_gwh:5500},
+  {name:"Tennessee",tax:4,water:5,fiber:4,disaster:3,curtailment:2,energy:5,f500:3,installed:250,curt_gwh:100},
+  {name:"Texas",tax:5,water:2,fiber:4,disaster:2,curtailment:5,energy:4,f500:5,installed:2500,curt_gwh:8000},
+  {name:"Utah",tax:3,water:2,fiber:4,disaster:4,curtailment:2,energy:4,f500:2,installed:200,curt_gwh:200},
+  {name:"Vermont",tax:2,water:5,fiber:3,disaster:5,curtailment:2,energy:2,f500:1,installed:5,curt_gwh:100},
+  {name:"Virginia",tax:5,water:5,fiber:4,disaster:4,curtailment:3,energy:3,f500:4,installed:4040,curt_gwh:700},
+  {name:"Washington",tax:3,water:4,fiber:2,disaster:4,curtailment:2,energy:5,f500:4,installed:450,curt_gwh:300},
+  {name:"West Virginia",tax:4,water:5,fiber:2,disaster:5,curtailment:3,energy:4,f500:1,installed:5,curt_gwh:700},
+  {name:"Wisconsin",tax:3,water:4,fiber:3,disaster:3,curtailment:4,energy:3,f500:3,installed:50,curt_gwh:2500},
+  {name:"Wyoming",tax:3,water:3,fiber:3,disaster:4,curtailment:4,energy:4,f500:1,installed:5,curt_gwh:2000},
+];
+
+const FACTORS = [
+  {key:"tax",        label:"Tax Incentives",       desc:"DC tax exemption programs",                color:"#1a3a6b"},
+  {key:"water",      label:"Water Availability",   desc:"WRI Aqueduct 4.0 · 5 = abundant",        color:"#0e6b77"},
+  {key:"fiber",      label:"Fiber / Connectivity", desc:"FCC BDC · 5 = ≥70% high-speed",          color:"#5b21b6"},
+  {key:"disaster",   label:"Disaster Safety",      desc:"FEMA NRI · 5 = lowest risk",             color:"#166534"},
+  {key:"curtailment",label:"Renewable Curtailment",desc:"GWh stranded · green opportunity",        color:"#92400e"},
+  {key:"energy",     label:"Energy Cost",          desc:"EIA 2024 rates · 5 = <$70/MWh",         color:"#991b1b"},
+  {key:"f500",       label:"Fortune 500 Density",  desc:"HQ count · demand proximity",            color:"#4c1d95"},
+];
+
+const PRESETS = {
+  equal:  {tax:1/7, water:1/7, fiber:1/7, disaster:1/7, curtailment:1/7, energy:1/7, f500:1/7},
+  ops:    {tax:.20, water:.20, fiber:.12, disaster:.12, curtailment:.12, energy:.16, f500:.08},
+  green:  {tax:.08, water:.08, fiber:.08, disaster:.08, curtailment:.40, energy:.20, f500:.08},
+  market: {tax:.08, water:.08, fiber:.15, disaster:.08, curtailment:.12, energy:.12, f500:.37},
+  energy: {tax:.10, water:.10, fiber:.10, disaster:.10, curtailment:.25, energy:.25, f500:.10},
+  "5f":   {tax:.20, water:.20, fiber:.20, disaster:.20, curtailment:.20, energy:.00, f500:.00},
+};
+
+let weights = {...PRESETS.equal};
+let sortKey = "score", sortDir = -1; // -1 = descending (highest first)
+
+function applyPreset(name, btn) {
+  weights = {...PRESETS[name]};
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  updateSliders();
+  render();
+}
+
+function buildSliders() {
+  const g = document.getElementById('slidersGrid');
+  FACTORS.forEach(f => {
+    const d = document.createElement('div');
+    d.className = 'slider-row';
+    d.innerHTML = `
+      <div class="slider-label">
+        <span class="slider-name" style="color:${f.color}">${f.label}</span>
+        <span class="slider-pct" id="pct_${f.key}" style="color:${f.color}">14.3%</span>
+      </div>
+      <input type="range" id="sl_${f.key}" min="0" max="100" step="1" value="14"
+        style="accent-color:${f.color}" oninput="onSlide('${f.key}',+this.value)">
+      <div class="slider-desc">${f.desc}</div>`;
+    g.appendChild(d);
+  });
+  updateSliders();
+}
+
+function updateSliders() {
+  FACTORS.forEach(f => {
+    const pct = Math.round(weights[f.key] * 1000) / 10;
+    document.getElementById('sl_' + f.key).value = Math.round(weights[f.key] * 100);
+    document.getElementById('pct_' + f.key).textContent = pct.toFixed(1) + '%';
+  });
+  updateTotal();
+}
+
+function onSlide(key, val) {
+  weights[key] = val / 100;
+  const pct = val.toFixed(1);
+  document.getElementById('pct_' + key).textContent = pct + '%';
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  updateTotal();
+  render();
+}
+
+function updateTotal() {
+  const tot = Object.values(weights).reduce((a, b) => a + b, 0);
+  const pct = Math.round(tot * 1000) / 10;
+  const el = document.getElementById('wtotal');
+  const ok = Math.abs(tot - 1) < 0.015;
+  el.textContent = `Total: ${pct.toFixed(1)}%` + (ok ? ' ✓' : ' — click Normalize to fix');
+  el.className = 'weight-total ' + (ok ? 'ok' : 'warn');
+}
+
+function normalize() {
+  const tot = Object.values(weights).reduce((a, b) => a + b, 0);
+  if (!tot) return;
+  FACTORS.forEach(f => weights[f.key] /= tot);
+  updateSliders();
+  render();
+}
+
+function calcScore(s) {
+  return FACTORS.reduce((sum, f) => sum + s[f.key] * weights[f.key], 0);
+}
+
+function sortBy(key, btn) {
+  if (sortKey === key) {
+    sortDir *= -1;
+  } else {
+    sortKey = key;
+    sortDir = (key === 'name') ? 1 : -1; // names: A→Z by default; numbers: high→low
+  }
+  // Update button states
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  // Update arrows
+  FACTORS.forEach(f => {
+    const el = document.getElementById('sd-' + f.key);
+    if (el) el.textContent = '';
+  });
+  ['score','name','curtailment','energy','f500','installed'].forEach(k => {
+    const el = document.getElementById('sd-' + k);
+    if (el) el.textContent = sortKey === k ? (sortDir === -1 ? '↓' : '↑') : '';
+  });
+  render();
+}
+
+function tierLabel(mw) {
+  if (mw >= 1000) return 'Tier 1 — Established hub';
+  if (mw >= 200)  return 'Tier 2 — Growing';
+  if (mw >= 50)   return 'Tier 3 — Emerging';
+  if (mw > 0)     return 'Tier 4 — Nascent';
+  return 'No market data';
+}
+
+function sc(v) {
+  return `<span class="sc sc${v}">${v}</span>`;
+}
+
+function render() {
+  const tot = Object.values(weights).reduce((a, b) => a + b, 0);
+  const normalized = Math.abs(tot - 1) < 0.015;
+
+  let data = STATES.map(s => ({...s, score: normalized ? calcScore(s) : 0}));
+
+  data.sort((a, b) => {
+    if (sortKey === 'name')      return sortDir * a.name.localeCompare(b.name);
+    if (sortKey === 'installed') return sortDir * (b.installed - a.installed);
+    if (sortKey === 'score')     return sortDir * (b.score - a.score);
+    return sortDir * (b[sortKey] - a[sortKey]);
+  });
+
+  // Assign rank by score separately so rank is always score-based
+  const byScore = [...data].sort((a, b) => b.score - a.score);
+  const rankMap = {};
+  byScore.forEach((s, i) => { rankMap[s.name] = i + 1; });
+
+  const body = document.getElementById('rankBody');
+  body.innerHTML = '';
+
+  data.forEach(s => {
+    const rank = rankMap[s.name];
+    let rowCls = rank <= 3 ? 'top3' : rank <= 10 ? 'top10' : '';
+
+    let rankHtml;
+    if (rank === 1) rankHtml = `<span class="rank-num r1">1</span>`;
+    else if (rank === 2) rankHtml = `<span class="rank-num r2">2</span>`;
+    else if (rank === 3) rankHtml = `<span class="rank-num r3">3</span>`;
+    else if (rank <= 10) rankHtml = `<span class="rank-num r-top10">${rank}</span>`;
+    else rankHtml = `<span class="r-other">${rank}</span>`;
+
+    const scoreDisp = normalized ? s.score.toFixed(2) : '—';
+    const barW = normalized ? Math.round((s.score / 5) * 100) : 0;
+
+    const tr = document.createElement('tr');
+    tr.className = rowCls;
+    tr.innerHTML = `
+      <td>${rankHtml}</td>
+      <td>
+        <div class="state-name">${s.name}</div>
+        <div class="state-tier">${tierLabel(s.installed)}</div>
+      </td>
+      <td>
+        <div class="score-val">${scoreDisp}</div>
+        <div class="score-bar-wrap"><div class="score-bar" style="width:${barW}%"></div></div>
+      </td>
+      <td>${sc(s.tax)}</td>
+      <td>${sc(s.water)}</td>
+      <td>${sc(s.fiber)}</td>
+      <td>${sc(s.disaster)}</td>
+      <td>
+        ${sc(s.curtailment)}
+        <div class="gwh-val">${s.curt_gwh.toLocaleString()} GWh</div>
+      </td>
+      <td>${sc(s.energy)}</td>
+      <td>${sc(s.f500)}</td>
+      <td>
+        <div class="mw-val">${s.installed.toLocaleString()} MW</div>
+      </td>
+    `;
+    body.appendChild(tr);
+  });
+
+  const sortLabel = {
+    score:'composite score', name:'state name', curtailment:'curtailment GWh',
+    energy:'energy cost score', f500:'Fortune 500 score', installed:'installed MW'
+  }[sortKey] || sortKey;
+  const dirLabel = sortDir === -1 ? 'highest first' : 'lowest first';
+  document.getElementById('tblNote').textContent =
+    normalized
+      ? `Showing all 51 states — sorted by ${sortLabel} (${dirLabel}). Top 10 highlighted.`
+      : 'Weights do not sum to 100% — click Normalize to fix.';
+}
+
+buildSliders();
+render();
+</script>
+</body>
+</html>
